@@ -56,5 +56,3 @@ for i = 1 : nfaces % read the data for each facet
     fread(fid,1,'int16'); % Move to the start of the next facet (2 bytes of padding)
 end
 fclose(fid);
-% slim the file (delete duplicated vertices)
-[v,f] = stlSlimVerts(v,f);

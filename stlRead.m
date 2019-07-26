@@ -5,9 +5,13 @@ function [v, f, n, name] = stlRead(fileName)
 %N are the normals
 %NAME is the name of the STL object (NOT the name of the STL file)
 
+% read content
 format = stlGetFormat(fileName);
 if strcmp(format,'ascii')
   [v,f,n,name] = stlReadAscii(fileName);
 elseif strcmp(format,'binary')
   [v,f,n,name] = stlReadBinary(fileName);
 end
+
+% slim the data (delete duplicated vertices)
+[v,f]=stlSlimVerts(v,f);

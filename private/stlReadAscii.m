@@ -51,6 +51,3 @@ nfaces = sum(strcmp(content,'endfacet')); % number of faces
 if (nvert == 3*nfaces)
     f = reshape(1:nvert,[3 nfaces])'; % create faces
 end
-
-% slim the file (delete duplicated vertices)
-[v,f] = stlSlimVerts(v,f);
