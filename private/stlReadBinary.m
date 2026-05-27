@@ -41,18 +41,22 @@ if isempty(name)
     name = 'Unnamed Object'; % no object name in binary files!
 end
 nfaces = fread(fid,1,'int32');  % reading the number of facets in the stl file (next 4 byters)
-nvert = 3*nfaces; % number of vertices
 % reserve memory for vectors (increase the processing speed)
-n = zeros(nfaces,3);
-v = zeros(nvert,3);
-f = zeros(nfaces,3);
+n = zeros(3, nfaces);
+v = zeros(3, 3, nfaces);
+f = zeros(3, nfaces);
 for i = 1 : nfaces % read the data for each facet
     tmp = fread(fid,3*4,'float'); % read coordinates
-    n(i,:) = tmp(1:3); % x,y,z components of the facet's normal vector
-    v(3*i-2,:) = tmp(4:6); % x,y,z coordinates of vertex 1
-    v(3*i-1,:) = tmp(7:9); % x,y,z coordinates of vertex 2
-    v(3*i,:) = tmp(10:12); % x,y,z coordinates of vertex 3
-    f(i,:) = [3*i-2 3*i-1 3*i]; % face
+    n(:,i)   = tmp(1:3); % x,y,z components of the facet's normal vector
+    v(:,1,i) = tmp(4:6); % x,y,z coordinates of vertex 1
+    v(:,2,i) = tmp(7:9); % x,y,z coordinates of vertex 2
+    v(:,3,i) = tmp(10:12); % x,y,z coordinates of vertex 3
+    offset = 3*(i-1);
+    f(:,i) = offset + (1:3); % face
     fread(fid,1,'int16'); % Move to the start of the next facet (2 bytes of padding)
 end
 fclose(fid);
+
+f = transpose(f);
+n = transpose(n);
+v = transpose(reshape(v, 3, []));
