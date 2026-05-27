@@ -37,3 +37,21 @@ list = vertices(rows,:);
 
 [newv,newf] = stlDelVerts(vertices,faces,list);
 stlPlot(newv,newf,'section of the femur');
+
+%% EXAMPLE 3.- How to rotate a mesh around an axis
+
+vrot = stlRotate(vertices, 'x', 45);
+stlPlot(vrot, faces, 'rotated femur');
+
+%% EXAMPLE 4.- How to combine multiple meshes
+
+meshA.FacesT = faces.';
+meshA.VerticesT = vertices.';
+meshA.nFaces = size(faces, 1);
+meshA.nVertices = size(vertices, 1);
+
+meshB = meshA;
+meshB.VerticesT = (vertices + [50, 0, 0]).';
+
+[facesCombined, verticesCombined] = stlCombineMeshes([meshA, meshB]);
+stlPlot(verticesCombined, facesCombined, 'combined femurs');
